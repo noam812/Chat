@@ -31,6 +31,7 @@ app.use(express.static(publicDirectory));
 //io object is for any/every connection
 //socket argument is for each instance
 io.on("connection", (socket) => {
+  console.log("connection");
   socket.on("join", ({ username, room }, callback) => {
     const { error, user } = addUser({
       id: socket.id,

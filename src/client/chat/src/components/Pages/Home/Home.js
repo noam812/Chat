@@ -4,13 +4,14 @@ import Sidebar from "./Sidebar";
 import Message from "./Message";
 import Profile from "./Profile";
 
-function Home() {
+function Home({ socket, messages, roomData }) {
+ 
   return (
     <>
-      <Sidebar />
+      <Sidebar roomData={roomData} />
       <Profile />
-      <Chat />
-      <Message />
+      <Chat messages={messages} />
+      <Message socket={socket} />
     </>
   );
 }

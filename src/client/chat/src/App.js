@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 import { io } from "socket.io-client";
 import "./App.css";
 import Home from "./components/Pages/Home/Home";
@@ -7,25 +7,51 @@ import Login from "./components/Pages/Login/Login";
 
 function App() {
   const [socket, setSocket] = useState(null);
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [logged, setLogged] = useState(false);
+  const [roomData, setRoomData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const newSocket = io(`http://localhost:3001`);
     setSocket(newSocket);
-    console.log(newSocket);
-    newSocket.on("message", (message) => setMessage(message));
-    console.log(message);
+
+    newSocket.on("message", (message) => {
+      setMessages((x) => [...x, message]);
+    });
+
+    newSocket.on("locationMessage", (message) => {
+      setMessages((x) => [...x, message]);
+    });
+
+    newSocket.on("roomData", (roomData) => {
+      setRoomData(roomData);
+    });
     return () => newSocket.close();
   }, [setSocket]);
+
+  useEffect(() => {
+    if (!logged) {
+      navigate("/login");
+    }
+    if (logged) {
+      navigate("/");
+    }
+  }, [logged, navigate]);
 
   return (
     <div className="App">
       <Routes>
         <Route
           path={"/"}
-          element={<Home socket={socket} message={message} />}
+          element={
+            <Home roomData={roomData} socket={socket} messages={messages} />
+          }
         />
-        <Route path={"/login"} element={<Login/>} />
+        <Route
+          path={"/login"}
+          element={<Login socket={socket} hasLogged={() => setLogged(true)} />}
+        />
       </Routes>
     </div>
   );

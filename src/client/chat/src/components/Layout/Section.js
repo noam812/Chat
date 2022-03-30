@@ -10,6 +10,7 @@ function Section(props) {
       bgColor={props.bgColor}
       justifyContent={props.justifyContent}
       alignItems={props.alignItems}
+      scrollable={props.scrollable}
     >
       {props.children}
     </StyledSection>
