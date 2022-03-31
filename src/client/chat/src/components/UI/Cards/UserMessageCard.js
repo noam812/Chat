@@ -1,19 +1,20 @@
 import React from "react";
-import { StyledMsgCard } from "./messageCard.styled";
+import { StyledUserMsgCard } from "./messageCard.styled";
 import FlexDiv from "../FlexDiv";
 import moment from "moment";
 
-function MessageCard(props) {
+function UserMessageCard(props) {
   const time = moment(props.time).format("h:mm a");
 
   return (
-    <StyledMsgCard flexDirection={"column"}>
+    <StyledUserMsgCard flexDirection={"column"}>
       {props.text.match(/^https?\:\/\/(www\.)?google\.[a-z]+\/maps\b/) ? (
         <>
           <FlexDiv flexDirection={"row"} width={"60%"}>
             <p>{props.username}</p>
             <p>{time}</p>
           </FlexDiv>
+
           <a href={props.text}>My location</a>
         </>
       ) : (
@@ -22,11 +23,12 @@ function MessageCard(props) {
             <p>{props.username}</p>
             <p>{time}</p>
           </FlexDiv>
+
           <p>{props.text}</p>
         </>
       )}
-    </StyledMsgCard>
+    </StyledUserMsgCard>
   );
 }
 
-export default MessageCard;
+export default UserMessageCard;

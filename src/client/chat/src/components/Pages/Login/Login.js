@@ -16,16 +16,14 @@ function Login({ socket, hasLogged }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(username, room);
-
     socket.emit("join", { username, room }, (error) => {
       if (error) {
-        alert(error);
-        navigate("/login");
+        return alert(error);
       }
+      hasLogged();
+
     });
-    
-    hasLogged()
+
     setUsername("");
     setRoom("");
   };

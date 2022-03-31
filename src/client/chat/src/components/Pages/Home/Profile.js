@@ -1,11 +1,19 @@
-import React from 'react'
-import Section from '../../Layout/Section'
+import React from "react";
+import Section from "../../Layout/Section";
+
+function Profile({ roomData, socket }) {
+  const user = roomData.users?.find((user) => {
+    return user.id === socket.id;
+  });
+ 
 
 
-function Profile() {
   return (
-    <Section gridColumn={"7/8"} gridRow={"1/8"} >Profile</Section>
-  )
+    <Section gridColumn={"7/8"} gridRow={"1/8"}  justifyContent={"flex-start"}>
+      <h1> Welcome </h1>
+      <h2>{user?.username}</h2>
+    </Section>
+  );
 }
 
-export default Profile
+export default Profile;
