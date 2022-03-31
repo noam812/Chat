@@ -21,7 +21,6 @@ function Login({ socket, hasLogged }) {
         return alert(error);
       }
       hasLogged();
-
     });
 
     setUsername("");
@@ -29,7 +28,9 @@ function Login({ socket, hasLogged }) {
   };
 
   return (
-    <Card flexDirection={"column"} justifyContent={"space-evenly"}>
+    <Card flexDirection={"column"} justifyContent={"flex-start"}>
+      <h1>Welcome</h1>
+      <h2>Create/Join room</h2>
       <Form onSubmit={handleSubmit}>
         <label style={{ margin: "1rem" }}>Enter Username</label>
         <FormInput
