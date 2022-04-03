@@ -11,7 +11,7 @@
     "start": "node src/index.js",
     "dev": "env-cmd -f ./src/config/dev.env nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "heroku-postbuild": "cd chat && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client/chat && npm run build --prefix client/chat"
   },
   "author": "",
   "license": "ISC",
