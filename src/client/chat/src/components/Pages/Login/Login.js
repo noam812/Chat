@@ -3,12 +3,10 @@ import Card from "../../UI/Cards/Card";
 import Form from "../../UI/Forms/Form";
 import FormInput from "../../UI/Forms/FormInput";
 import Button from "../../UI/Buttons/Button";
-import { useNavigate } from "react-router";
 
 function Login({ socket, hasLogged }) {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
-  const navigate = useNavigate();
 
   const handleUsername = (e) => setUsername(e.target.value);
   const handleRoom = (e) => setRoom(e.target.value);

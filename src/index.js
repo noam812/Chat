@@ -27,36 +27,34 @@ const port = process.env.PORT || 3001;
 const publicDirectory = path.join(__dirname, "../public");
 app.use(express.static(publicDirectory));
 
-
 //io object is for any/every connection
 //socket argument is for each instance
 io.on("connection", (socket) => {
   console.log("connection");
   socket.on("join", ({ username, room }, callback) => {
-    const { error, user } = addUser({
-      id: socket.id,
-      username: username,
-      room: room,
-    });
+    try {
+      const user = addUser({
+        id: socket.id,
+        username: username,
+        room: room,
+      });
+      socket.join(room);
 
-    if (error) {
-      return callback(error);
+      //Send welcome massage
+      socket.emit("message", generateMessage("Welcome", "Admin"));
+
+      //Send message to all other connection when a user is connecting (Instance is made)
+      socket.broadcast
+        .to(room)
+        .emit("message", generateMessage(`${username} has joined the room`));
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getUsersInRoom(user.room),
+      });
+      callback();
+    } catch (error) {
+      return callback(error.message);
     }
-  
-    socket.join(room);
-
-    //Send welcome massage
-    socket.emit("message", generateMessage("Welcome", "Admin"));
-
-    //Send message to all other connection when a user is connecting (Instance is made)
-    socket.broadcast
-      .to(room)
-      .emit("message", generateMessage(`${username} has joined the room`));
-    io.to(user.room).emit("roomData", {
-      room: user.room,
-      users: getUsersInRoom(user.room),
-    });
-    callback();
   });
 
   // Deliver massage from client to all other connections

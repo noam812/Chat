@@ -1,15 +1,14 @@
 const users = [];
 
 const addUser = ({ id, username, room }) => {
+  //Validate data
+  if (!username || !room) {
+     throw new Error( "username and room are required!")
+    
+  }
   //Clean Data
   room = room.trim().toLowerCase();
   username = username.trim().toLowerCase();
-  //Validate data
-  if (!username || !room) {
-    return {
-      error: "username and room are required!",
-    };
-  }
   //Check for existing user
   const existingUser = users.find((user) => {
     return user.room === room && user.username === username;
@@ -25,7 +24,7 @@ const addUser = ({ id, username, room }) => {
   //Store user
   const user = { id, username, room };
   users.push(user);
-  return { user };
+  return  user ;
 };
 
 const removeUser = (id) => {

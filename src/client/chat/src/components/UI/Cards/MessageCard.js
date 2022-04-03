@@ -7,7 +7,7 @@ function MessageCard(props) {
   const time = moment(props.time).format("h:mm a");
 
   return (
-    <StyledMsgCard flexDirection={"column"}>
+    <StyledMsgCard alignSelf={props.alignSelf} flexDirection={"column"} lBorderTop={props.lBorderTop}>
       {props.text.match(/^https?\:\/\/(www\.)?google\.[a-z]+\/maps\b/) ? (
         <>
           <FlexDiv flexDirection={"row"} width={"60%"}>

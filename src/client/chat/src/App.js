@@ -13,9 +13,15 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const newSocket = io(`http://localhost:3001`);
+    const newSocket = io(
+      `http://${
+        process.env.NODE_ENV === "development"
+          ? "localhost:3001"
+          : window.location.host
+      }`
+    );
     setSocket(newSocket);
-
+    //TODO Fix to one message event with different types (url/text)
     newSocket.on("message", (message) => {
       setMessages((x) => [...x, message]);
     });
@@ -28,7 +34,7 @@ function App() {
       setRoomData(roomData);
     });
     return () => newSocket.close();
-  }, [setSocket]);
+  }, []);
 
   useEffect(() => {
     if (!logged) {

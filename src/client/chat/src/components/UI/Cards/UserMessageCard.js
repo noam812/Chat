@@ -7,7 +7,8 @@ function UserMessageCard(props) {
   const time = moment(props.time).format("h:mm a");
 
   return (
-    <StyledUserMsgCard flexDirection={"column"}>
+    <StyledUserMsgCard flexDirection={"column"} >
+      {/* TODO - fix regex this is where message types will be handy*/}
       {props.text.match(/^https?\:\/\/(www\.)?google\.[a-z]+\/maps\b/) ? (
         <>
           <FlexDiv flexDirection={"row"} width={"60%"}>

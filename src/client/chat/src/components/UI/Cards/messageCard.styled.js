@@ -14,8 +14,8 @@ const StyledMsgCard = styled(StyledCard)`
     );
   background-clip: padding-box, border-box;
   border-radius: 40px;
-  border-top-left-radius: 0%;
-  align-self: flex-start;
+  border-top-left-radius: ${(props) => props.lBorderTop || "0%"};
+  align-self: ${(props) => props.alignSelf || "flex-start"};
 `;
 
 const StyledUserMsgCard = styled(StyledMsgCard)`
@@ -28,6 +28,6 @@ const StyledUserMsgCard = styled(StyledMsgCard)`
       rgb(160 167 203) 100%
     );
   border-radius: 40px;
-  border-top-right-radius: 0%;
+  border-top-right-radius:  0%;
 `;
 export { StyledMsgCard, StyledUserMsgCard };

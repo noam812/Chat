@@ -21,6 +21,7 @@ function Chat({ messages, socket, roomData }) {
   return (
     <Section gridColumn={"2/7"} gridRow={"1/7"} scrollable={"auto"}>
       {messages.map((msg, i) => {
+        console.log(msg);
         if (user?.username !== msg.username) {
           return (
             <MessageCard
@@ -28,15 +29,25 @@ function Chat({ messages, socket, roomData }) {
               username={msg.username}
               text={msg.text}
               time={msg.createdAt}
+              alignSelf={
+                msg.username === "Admin" || !msg.username
+                  ? "center"
+                  : "flex-start"
+              }
+              lBorderTop={
+                msg.username === "Admin" || !msg.username ? "40px" : "0%"
+              }
             />
           );
         }
-        return (   <UserMessageCard
-          key={i}
-          username={msg.username}
-          text={msg.text}
-          time={msg.createdAt}
-        />)
+        return (
+          <UserMessageCard
+            key={i}
+            username={msg.username}
+            text={msg.text}
+            time={msg.createdAt}
+          />
+        );
       })}
       <div ref={messagesEndRef} />
     </Section>
