@@ -26,7 +26,7 @@ const io = socketio(server, {
 const port = process.env.PORT || 3001;
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/chat/build")));
+  app.use(express.static(path.join(__dirname, "../client/chat/build")));
 
   app.get("*", (req, res) => {
     res.sendFile(
