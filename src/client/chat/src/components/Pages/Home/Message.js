@@ -31,7 +31,6 @@ function Message({ socket }) {
           long: position.coords.longitude,
         },
         () => {
-          console.log("location Shared");
         }
       );
     });
@@ -66,3 +65,5 @@ function Message({ socket }) {
 }
 
 export default Message;
+
+

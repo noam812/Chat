@@ -3,7 +3,6 @@ import Section from "../../Layout/Section";
 import Card from "../../UI/Cards/Card";
 
 function Sidebar({ roomData }) {
-  console.log(roomData);
   return (
     <Section gridColumn={"1/2"} gridRow={"1/8"} justifyContent={"flex-start"}>
       <h1>Room : {roomData.room}</h1>

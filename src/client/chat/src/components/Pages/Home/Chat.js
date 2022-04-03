@@ -5,7 +5,6 @@ import UserMessageCard from "../../UI/Cards/UserMessageCard";
 
 function Chat({ messages, socket, roomData }) {
   const messagesEndRef = useRef(null);
-  console.log(socket);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -21,7 +20,6 @@ function Chat({ messages, socket, roomData }) {
   return (
     <Section gridColumn={"2/7"} gridRow={"1/7"} scrollable={"auto"}>
       {messages.map((msg, i) => {
-        console.log(msg);
         if (user?.username !== msg.username) {
           return (
             <MessageCard

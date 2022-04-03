@@ -24,13 +24,18 @@ const io = socketio(server, {
 });
 
 const port = process.env.PORT || 3001;
-const publicDirectory = path.join(__dirname, "../public");
+const publicDirectory = path.join(__dirname, "build");
 app.use(express.static(publicDirectory));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "./build/index.html"));
+});
 
 //io object is for any/every connection
 //socket argument is for each instance
 io.on("connection", (socket) => {
-  console.log("connection");
+
+  
   socket.on("join", ({ username, room }, callback) => {
     try {
       const user = addUser({
