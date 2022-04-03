@@ -24,14 +24,16 @@ const io = socketio(server, {
 });
 
 const port = process.env.PORT || 3001;
-const publicDirectory = path.join(__dirname, "client/chat/build");
-app.use(express.static(publicDirectory));
 
-app.get("*", (req, res) => {
-  res.sendFile(
-    path.resolve(__dirname, "client", "chat", "build", "index.html")
-  );
-});
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/chat/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "client", "chat", "build", "index.html")
+    );
+  });
+}
 
 //io object is for any/every connection
 //socket argument is for each instance
