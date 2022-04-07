@@ -1,6 +1,5 @@
 const path = require("path");
 const http = require("http");
-const https = require("https");
 const fs = require("fs");
 const cors = require("cors");
 const express = require("express");
@@ -24,13 +23,8 @@ const io = socketio(server, {
     methods: ["GET", "POST"],
   },
 });
-const options = {
-  key: fs.readFileSync(path.join(__dirname, "../../ssl-keys/key.pem")),
-  cert: fs.readFileSync(path.join(__dirname, "../../ssl-keys/cert.pem")),
-  passphrase: process.env.PASSPHRASE,
-};
 
-const secureServer = https.createServer(options, app);
+
 
 const port = process.env.PORT || 3001;
 
@@ -114,7 +108,3 @@ io.on("connection", (socket) => {
 });
 
 server.listen(port);
-
-// secureServer.listen(443, () => {
-//   console.log("hey");
-// });
