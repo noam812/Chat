@@ -24,18 +24,16 @@ const io = socketio(server, {
   },
 });
 
-
-
 const port = process.env.PORT || 3001;
 
-app.use(express.static(path.join(__dirname, "build")));
+// app.use(express.static(path.join(__dirname, "build")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "build", "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "build", "index.html"));
+// });
 
 app.get("/", (req, res) => {
-  print("Server is up");
+ res.send("Server is up");
 });
 //io object is for any/every connection
 //socket argument is for each instance
