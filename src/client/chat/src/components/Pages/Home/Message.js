@@ -48,9 +48,9 @@ function Message({ socket }) {
 
         <svg width="0" height="0">
           <linearGradient id="blue-gradient" x1="9%" y1="100%" x2="0%" y2="0%">
-            <stop stop-color="#afbdff" offset="0%"></stop>
-            <stop stop-color="#c2dbe2" offset="0%"></stop>
-            <stop stop-color="#768eff" offset="0%"></stop>
+            <stop stopColor="#afbdff" offset="0%"></stop>
+            <stop stopColor="#c2dbe2" offset="0%"></stop>
+            <stop stopColor="#768eff" offset="0%"></stop>
           </linearGradient>
         </svg>
         <Button type="submit">

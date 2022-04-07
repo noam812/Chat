@@ -1,5 +1,7 @@
 const path = require("path");
 const http = require("http");
+const https = require("https");
+const fs = require("fs");
 const cors = require("cors");
 const express = require("express");
 const socketio = require("socket.io");
@@ -22,19 +24,25 @@ const io = socketio(server, {
     methods: ["GET", "POST"],
   },
 });
+const options = {
+  key: fs.readFileSync(path.join(__dirname, "../../ssl-keys/key.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "../../ssl-keys/cert.pem")),
+  passphrase: process.env.PASSPHRASE,
+};
+
+const secureServer = https.createServer(options, app);
 
 const port = process.env.PORT || 3001;
 
+app.use(express.static(path.join(__dirname, "build")));
 
-  app.use(express.static(path.join(__dirname, "../client/chat/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "build", "index.html"));
+});
 
-  app.get("*", (req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "../client", "chat", "build", "index.html")
-    );
-  });
-
-
+app.get("/", (req, res) => {
+  print("Server is up");
+});
 //io object is for any/every connection
 //socket argument is for each instance
 io.on("connection", (socket) => {
@@ -70,7 +78,7 @@ io.on("connection", (socket) => {
     const user = getUser(socket.id);
     const filter = new Filter();
     if (filter.isProfane(message)) {
-      return callback("profanity is not allowd");
+      return callback("profanity is not allowed");
     }
     if (message === "") {
       return callback("No empty texts");
@@ -105,6 +113,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(port, () => {
-  console.log(`Server is running on port : ${port}`);
-});
+server.listen(port);
+
+// secureServer.listen(443, () => {
+//   console.log("hey");
+// });
