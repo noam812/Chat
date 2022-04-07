@@ -11,13 +11,13 @@ function App() {
   const [logged, setLogged] = useState(false);
   const [roomData, setRoomData] = useState([]);
   const navigate = useNavigate();
-
+  console.log(window.location.host);
   useEffect(() => {
     const newSocket = io(
-      `http://${
+      `${
         process.env.NODE_ENV === "development"
-          ? "localhost:3001"
-          : window.location.host
+          ? "http://localhost:3001"
+          : "https://noamy-chatapp-v1.herokuapp.com/"
       }`
     );
     setSocket(newSocket);
