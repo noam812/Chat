@@ -5,9 +5,9 @@ import moment from "moment";
 
 function UserMessageCard(props) {
   const time = moment(props.time).format("h:mm a");
-
+  console.log(props.text.split("\n"));
   return (
-    <StyledUserMsgCard flexDirection={"column"} >
+    <StyledUserMsgCard flexDirection={"column"}>
       {/* TODO - fix regex this is where message types will be handy*/}
       {props.text.match(/^https?\:\/\/(www\.)?google\.[a-z]+\/maps\b/) ? (
         <>
@@ -25,7 +25,12 @@ function UserMessageCard(props) {
             <p>{time}</p>
           </FlexDiv>
 
-          <p>{props.text}</p>
+          <text>
+            {props.text.split("\n").map((split, i) => {
+              return split;
+            })}
+            <br></br>
+          </text>
         </>
       )}
     </StyledUserMsgCard>

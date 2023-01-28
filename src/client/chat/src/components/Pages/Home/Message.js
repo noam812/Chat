@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import Section from "../../Layout/Section";
-import Button from "../../UI/Buttons/Button";
+import { StyledMessageSection } from "../../Layout/section.styled";
+import { StyledButton } from "../../UI/Buttons/button.styled";
+
 import Form from "../../UI/Forms/Form";
-import FormInput from "./../../UI/Forms/FormInput";
+import { StyledTxtArea } from "../../UI/Forms/formInput.styled";
 import { MdSend, MdLocationPin } from "react-icons/md";
 
 function Message({ socket }) {
@@ -30,16 +31,19 @@ function Message({ socket }) {
           lat: position.coords.latitude,
           long: position.coords.longitude,
         },
-        () => {
-        }
+        () => {}
       );
     });
   };
 
   return (
-    <Section gridColumn={"2/7"} gridRow={"7/8"} flexDirection={"row"}>
+    <StyledMessageSection
+      gridColumn={"1/7"}
+      gridRow={"7/8"}
+      flexDirection={"row"}
+    >
       <Form onSubmit={handleSubmit} width={"fit-content"}>
-        <FormInput
+        <StyledTxtArea
           value={message}
           onChange={(e) => {
             SetMessage(e.target.value);
@@ -53,17 +57,15 @@ function Message({ socket }) {
             <stop stopColor="#768eff" offset="0%"></stop>
           </linearGradient>
         </svg>
-        <Button type="submit">
+        <StyledButton type="submit">
           <MdSend style={{ fill: "url(#blue-gradient)" }} size={"30px"} />
-        </Button>
+        </StyledButton>
       </Form>
-      <Button onClick={handleLocation}>
+      <StyledButton onClick={handleLocation}>
         <MdLocationPin style={{ fill: "url(#blue-gradient)" }} size={"30px"} />
-      </Button>
-    </Section>
+      </StyledButton>
+    </StyledMessageSection>
   );
 }
 
 export default Message;
-
-

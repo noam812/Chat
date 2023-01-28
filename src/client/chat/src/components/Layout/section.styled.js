@@ -20,7 +20,6 @@ const StyledSection = styled.div`
     );
   background-clip: padding-box, border-box;
   border-radius: 15px;
-  overflow-y: ${(props) => props.scrollable || "none"};
 
   &::-webkit-scrollbar {
     width: 1rem;
@@ -42,4 +41,39 @@ const StyledSection = styled.div`
   }
 `;
 
-export default StyledSection;
+const StyledChatSection = styled(StyledSection)`
+  overflow-y: ${(props) => props.scrollable || "none"};
+  @media (max-width: 1024px) {
+    grid-column: 1/8;
+    grid-row: 2/7;
+  }
+`;
+
+const StyledMessageSection = styled(StyledSection)`
+  @media (max-width: 1024px) {
+    grid-column: 1/8;
+    grid-row: 7/8;
+  }
+`;
+
+const StyledProfileSection = styled(StyledSection)`
+  grid-column: 7/8;
+  grid-row: 1/8;
+  justify-content: flex-start;
+  z-index: 10;
+  @media (max-width: 1024px) {
+    display: inline-flex;
+    grid-column: 1/8;
+    grid-row: 1/1;
+  }
+`;
+
+const StyledRoomSection = styled(StyledSection)``;
+
+export {
+  StyledSection,
+  StyledChatSection,
+  StyledMessageSection,
+  StyledProfileSection,
+  StyledRoomSection,
+};

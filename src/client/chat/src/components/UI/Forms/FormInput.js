@@ -1,5 +1,5 @@
 import React from "react";
-import StyledInput from "./formInput.styled";
+import { StyledInput } from "./formInput.styled";
 
 function FormInput(props) {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import StyledButton from "./button.styled";
+import {StyledButton} from "./button.styled";
 
 function Button(props) {
   return (

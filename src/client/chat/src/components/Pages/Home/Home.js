@@ -7,7 +7,7 @@ import Profile from "./Profile";
 function Home({ socket, messages, roomData }) {
   return (
     <>
-      <Sidebar roomData={roomData} />
+      {/* <Sidebar roomData={roomData} /> */}
       <Profile roomData={roomData} socket={socket} />
       <Chat roomData={roomData} socket={socket} messages={messages} />
       <Message socket={socket} />

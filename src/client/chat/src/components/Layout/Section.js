@@ -1,5 +1,5 @@
 import React from "react";
-import StyledSection from "./section.styled";
+import {StyledSection} from "./section.styled";
 
 function Section(props) {
   return (
@@ -11,6 +11,7 @@ function Section(props) {
       justifyContent={props.justifyContent}
       alignItems={props.alignItems}
       scrollable={props.scrollable}
+      className={props.className}
     >
       {props.children}
     </StyledSection>

@@ -1,8 +1,9 @@
 
 # dependencies
 /node_modules
+.env
 dev.env
-
+url
 # production
 build
 

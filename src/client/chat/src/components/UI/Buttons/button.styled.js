@@ -38,4 +38,12 @@ const StyledButton = styled.button`
     mask-composite: exclude;
   }
 `;
-export default StyledButton;
+
+const LoginButton = styled(StyledButton)`
+  @media (max-width: 768px) {
+    width: 60%;
+    height: 4rem;
+    font-size: 30px;
+  }
+`;
+export { StyledButton, LoginButton };

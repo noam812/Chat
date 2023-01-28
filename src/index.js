@@ -1,20 +1,26 @@
 const path = require("path");
 const http = require("http");
 const fs = require("fs");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
 const socketio = require("socket.io");
 const Filter = require("bad-words");
 const { generateMessage } = require("./utils/messages");
 const {
-  addUser,
+  loginUser,
   removeUser,
   getUser,
   getUsersInRoom,
+  signupUser,
 } = require("./utils/users");
+const { getRooms } = require("./utils/rooms");
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
+
 //Socket.io requirements config -to use socketIO we need to configure our express app
 const server = http.createServer(app);
 const io = socketio(server, {
@@ -33,18 +39,74 @@ const port = process.env.PORT || 3001;
 // });
 
 app.get("/", (req, res) => {
- res.send("Server is up");
+  res.send("Server is up");
 });
+mongoose.set("strictQuery", false);
+mongoose.connect(
+  process.env.DB_CREDENTIALS,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  () => {
+    console.log("DB Connected");
+  }
+);
+app.post("/login", async (req, res) => {
+  try {
+    console.log(req.body);
+    const { email, password } = req.body;
+    const user = await loginUser({
+      email: email,
+      password: password
+    });
+    res.send(user);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.post("/signup", async (req, res) => {
+  try {
+    console.log(req.body);
+    const { username, email, password } = req.body;
+    const user = await signupUser({
+      username: username,
+      email: email,
+      password: password,
+    });
+    res.send(user);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+app.get("/home", async (req, res) => {
+  try {
+    console.log(req.body);
+    //should be user
+    const { email } = req.body;
+    const rooms = await getRooms({    
+      email: email,
+    });
+    res.send(rooms);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 //io object is for any/every connection
 //socket argument is for each instance
 io.on("connection", (socket) => {
-  socket.on("join", ({ username, room }, callback) => {
+  socket.on("join", ({ email, username, password }, callback) => {
+    // check if user exists- if not send to login.
     try {
-      const user = addUser({
-        id: socket.id,
+      const user = loginUser({
+        email: email,
         username: username,
-        room: room,
+        password: password,
       });
+
       socket.join(room);
 
       //Send welcome massage

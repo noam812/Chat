@@ -22,4 +22,15 @@ const StyledCard = styled.div`
   border-radius: 15px;
 `;
 
-export default StyledCard;
+const LoginCard = styled(StyledCard)`
+  height: 40em;
+  width: 35em;
+
+  @media (max-width: 768px) {
+    height: 100%;
+    width: 100%;
+    font-size: 30px;
+  }
+`;
+
+export { StyledCard, LoginCard };

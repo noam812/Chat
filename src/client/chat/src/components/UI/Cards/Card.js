@@ -1,5 +1,5 @@
 import React from "react";
-import StyledCard from "./card.styled";
+import {StyledCard} from "./card.styled";
 function Card(props) {
   return (
     <StyledCard

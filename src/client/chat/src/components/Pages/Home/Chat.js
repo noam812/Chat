@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
-import Section from "./../../Layout/Section";
+import { StyledChatSection } from "./../../Layout/section.styled";
 import MessageCard from "../../UI/Cards/MessageCard";
 import UserMessageCard from "../../UI/Cards/UserMessageCard";
+import AdminMessageCard from "./../../UI/Cards/AdminMsgCard";
 
 function Chat({ messages, socket, roomData }) {
   const messagesEndRef = useRef(null);
@@ -18,26 +19,31 @@ function Chat({ messages, socket, roomData }) {
     scrollToBottom();
   }, [messages]);
   return (
-    <Section gridColumn={"2/7"} gridRow={"1/7"} scrollable={"auto"}>
+    <StyledChatSection gridColumn={"1/7"} gridRow={"1/7"} scrollable={"auto"}>
       {messages.map((msg, i) => {
-        if (user?.username !== msg.username) {
+        console.log(msg);
+        if (msg.username === "Admin" || !msg.username) {
           return (
-            <MessageCard
+            <AdminMessageCard
               key={i}
               username={msg.username}
               text={msg.text}
               time={msg.createdAt}
-              alignSelf={
-                msg.username === "Admin" || !msg.username
-                  ? "center"
-                  : "flex-start"
-              }
-              lBorderTop={
-                msg.username === "Admin" || !msg.username ? "40px" : "0%"
-              }
             />
           );
         }
+        if (user?.username !== msg.username) {
+          return (
+            <MessageCard
+            
+              key={i}
+              username={msg.username}
+              text={msg.text}
+              time={msg.createdAt}
+            />
+          );
+        }
+
         return (
           <UserMessageCard
             key={i}
@@ -48,7 +54,7 @@ function Chat({ messages, socket, roomData }) {
         );
       })}
       <div ref={messagesEndRef} />
-    </Section>
+    </StyledChatSection>
   );
 }
 

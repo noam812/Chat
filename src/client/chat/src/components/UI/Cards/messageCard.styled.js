@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import StyledCard from "./card.styled";
+import { StyledCard } from "./card.styled";
 
 const StyledMsgCard = styled(StyledCard)`
   height: fit-content;
@@ -28,6 +28,12 @@ const StyledUserMsgCard = styled(StyledMsgCard)`
       rgb(160 167 203) 100%
     );
   border-radius: 40px;
-  border-top-right-radius:  0%;
+  border-top-right-radius: 0%;
 `;
-export { StyledMsgCard, StyledUserMsgCard };
+
+const AdminMsg = styled(StyledMsgCard)`
+  border-radius: none;
+  background-image: none;
+  background-color: transparent;
+`;
+export { StyledMsgCard, StyledUserMsgCard, AdminMsg };

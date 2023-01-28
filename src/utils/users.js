@@ -1,58 +1,92 @@
-const users = [];
-
-const addUser = ({ id, username, room }) => {
+const User = require("../models/User");
+const loginUser = async ({ email, password }) => {
+  console.log({ email, password });
   //Validate data
-  if (!username || !room) {
-     throw new Error( "username and room are required!")
-    
+  if (!email) {
+    throw new Error("email is required!");
+  }
+  if (!password) {
+    throw new Error("password is required!");
   }
   //Clean Data
-  room = room.trim().toLowerCase();
-  username = username.trim().toLowerCase();
+  email = email.trim().toLowerCase();
+  password = password.trim();
   //Check for existing user
-  const existingUser = users.find((user) => {
-    return user.room === room && user.username === username;
-  });
-
+  const existingUser = await User.findOne({ email });
   //Validate username
   if (existingUser) {
-    return {
-      error: "Username is already taken!",
-    };
+    if (existingUser.email === email) {
+      return {
+        error: "Email is already taken!",
+      };
+    }
   }
+  return existingUser;
+};
 
+const signupUser = async ({ username, email, password }) => {
+  console.log({ username, email, password });
+  //Validate data
+  if (!username) {
+    throw new Error("username is required!");
+  }
+  if (!email) {
+    throw new Error("email is required!");
+  }
+  if (!password) {
+    throw new Error("password is required!");
+  }
+  //Clean Data
+  username = username.trim().toLowerCase();
+  email = email.trim().toLowerCase();
+  password = password.trim();
+  //Check for existing user
+  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  //Validate username
+  if (existingUser) {
+    if (existingUser.email === email) {
+      return {
+        error: "Email is already taken!",
+      };
+    }
+    if (existingUser.username === username) {
+      return {
+        error: "Username is already taken!",
+      };
+    }
+  }
   //Store user
-  const user = { id, username, room };
-  users.push(user);
-  return  user ;
+  const user = new User({ username, email, password });
+  await user.save();
+  return user;
 };
 
-const removeUser = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) {
-    return users.splice(index, 1)[0];
+const removeUser = async (id) => {
+  const user = await User.findOneAndDelete({ id });
+  if (!user) {
+    return { error: "User not found" };
   }
+  return user;
 };
 
-const getUser = (id) => {
-  const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) {
-    return users[index];
+const getUser = async (id) => {
+  const user = await User.findOne({ id });
+  if (!user) {
+    return { error: "User not found" };
   }
-  return {
-    error: "User not found",
-  };
+  return user;
 };
 
-const getUsersInRoom = (room) => {
-  room = room.trim().toLowerCase();
-  const usersInRoom = users.filter((user) => user.room === room);
-  return usersInRoom;
-};
+// const getUsersInRoom = async (room) => {
+//   room = room.trim().toLowerCase();
+//   const users = await User.find({ room });
+//   return users;
+// }
 
 module.exports = {
-  addUser,
+  loginUser,
   removeUser,
   getUser,
-  getUsersInRoom,
+  signupUser,
+  // getUsersInRoom
 };

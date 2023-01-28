@@ -1,52 +1,66 @@
 import React, { useState } from "react";
 import Card from "../../UI/Cards/Card";
+import { LoginCard } from "../../UI/Cards/card.styled";
 import Form from "../../UI/Forms/Form";
-import FormInput from "../../UI/Forms/FormInput";
-import Button from "../../UI/Buttons/Button";
+import { LoginInput } from "../../UI/Forms/formInput.styled";
+import { LoginButton } from "../../UI/Buttons/button.styled";
+import axios from "axios"
 
 function Login({ socket, hasLogged }) {
   const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleUsername = (e) => setUsername(e.target.value);
-  const handleRoom = (e) => setRoom(e.target.value);
+  const handlePassword = (e) => setPassword(e.target.value);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    socket.emit("join", { username, room }, (error) => {
-      if (error) {
-        return alert(error);
-      }
-      hasLogged();
-    });
+    try {
+      // Send a POST request to the Node.js backend to authenticate the user
+      const response = await axios.post('http://localhost:3001/login', {
+        username,
+        password
+      });
 
-    setUsername("");
-    setRoom("");
+      if (response.status !== 200) {
+        throw new Error(response.data.error);
+      }
+
+        // Emit a "join" event to the Socket.IO server
+        socket.emit("join", { username }, (error) => {
+          if (error) {
+            return alert(error);
+          }
+        });
+      hasLogged();
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (
-    <Card flexDirection={"column"} justifyContent={"flex-start"}>
+    <LoginCard flexDirection={"column"} justifyContent={"flex-start"}>
       <h1>Welcome</h1>
-      <h2>Create/Join room</h2>
+      <h2>Please Login</h2>
       <Form onSubmit={handleSubmit}>
-        <label style={{ margin: "1rem" }}>Enter Username</label>
-        <FormInput
+        <label >Enter Username</label>
+        <LoginInput
           type={"text"}
           value={username}
           onChange={handleUsername}
           required={true}
         />
-        <label style={{ margin: "1rem" }}>Enter Room</label>
-        <FormInput
-          type={"text"}
-          onChange={handleRoom}
-          value={room}
+        <label>Enter Password</label>
+        <LoginInput
+          type={"password"}
+          onChange={handlePassword}
+          value={password}
           required={true}
         />
-        <Button type={"submit"}>Login</Button>
+        <LoginButton type={"submit"}>Login</LoginButton>
       </Form>
-    </Card>
+    </LoginCard>
   );
 }
 
