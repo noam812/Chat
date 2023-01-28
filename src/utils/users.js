@@ -24,42 +24,7 @@ const loginUser = async ({ email, password }) => {
   return existingUser;
 };
 
-const signupUser = async ({ username, email, password }) => {
-  console.log({ username, email, password });
-  //Validate data
-  if (!username) {
-    throw new Error("username is required!");
-  }
-  if (!email) {
-    throw new Error("email is required!");
-  }
-  if (!password) {
-    throw new Error("password is required!");
-  }
-  //Clean Data
-  username = username.trim().toLowerCase();
-  email = email.trim().toLowerCase();
-  password = password.trim();
-  //Check for existing user
-  const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-  //Validate username
-  if (existingUser) {
-    if (existingUser.email === email) {
-      return {
-        error: "Email is already taken!",
-      };
-    }
-    if (existingUser.username === username) {
-      return {
-        error: "Username is already taken!",
-      };
-    }
-  }
-  //Store user
-  const user = new User({ username, email, password });
-  await user.save();
-  return user;
-};
+
 
 const removeUser = async (id) => {
   const user = await User.findOneAndDelete({ id });
@@ -87,6 +52,6 @@ module.exports = {
   loginUser,
   removeUser,
   getUser,
-  signupUser,
+ 
   // getUsersInRoom
 };

@@ -1,4 +1,4 @@
-const path = require("path");
+require("dotenv").config();
 const http = require("http");
 const fs = require("fs");
 const bodyParser = require("body-parser");
@@ -6,17 +6,16 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
 const socketio = require("socket.io");
-const Filter = require("bad-words");
+const session = require("express-session");
+const passport = require("passport");
+const User = require("./models/User");
 const { generateMessage } = require("./utils/messages");
 const {
   loginUser,
   removeUser,
   getUser,
   getUsersInRoom,
-  signupUser,
 } = require("./utils/users");
-const { getRooms } = require("./utils/rooms");
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -31,6 +30,17 @@ const io = socketio(server, {
 });
 
 const port = process.env.PORT || 3001;
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use(express.static(path.join(__dirname, "build")));
 
@@ -58,21 +68,6 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await loginUser({
       email: email,
-      password: password
-    });
-    res.send(user);
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-app.post("/signup", async (req, res) => {
-  try {
-    console.log(req.body);
-    const { username, email, password } = req.body;
-    const user = await signupUser({
-      username: username,
-      email: email,
       password: password,
     });
     res.send(user);
@@ -81,18 +76,47 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.get("/home", async (req, res) => {
-  try {
-    console.log(req.body);
-    //should be user
-    const { email } = req.body;
-    const rooms = await getRooms({    
-      email: email,
-    });
-    res.send(rooms);
-  } catch (error) {
-    console.error(error);
+app.post("/signup", (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email) {
+    throw new Error("email is required!");
   }
+  if (!password) {
+    throw new Error("password is required!");
+  }
+
+  User.register(
+    { username: email.trim().toLowerCase() },
+    password.trim(),
+    function (err, user) {
+      console.error(err);
+      if (err) {
+        console.error(err);
+        res.redirect("/signup");
+      } else {
+        passport.authenticate("local")(req, res, function () {
+          console.log(user);
+          res.redirect("/home");
+        });
+      }
+    }
+  );
+});
+
+const auth = (req, res, next) => {
+  console.log(req.isAuthenticated());
+  if (req.isAuthenticated()) {
+    next();
+  }
+  res.redirect("/login");
+};
+
+app.get("/home",  (req, res) => {
+  if (req.isAuthenticated()) {
+    res.render("home");
+  }
+  res.redirect("/login");
 });
 
 //io object is for any/every connection
